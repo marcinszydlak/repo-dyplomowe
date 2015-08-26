@@ -1,0 +1,21 @@
+﻿@model IEnumerable<DataServices.ViewModels.StudentModel>
+@using GridMvc.Html
+
+@{
+    ViewBag.Title = "ManageStudents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ManageStudents</h2>
+
+<p>
+    @Html.ActionLink("Dodaj nowego ucznia", "AddNewStudent")
+    @Html.Grid(Model).Named("StudentList").Columns(columns =>{ columns.Add(x=>x.IdKlasy);
+                                          columns.Add(x=>x.IdUcznia);
+                                          columns.Add(x=>x.Klasa);
+                                          columns.Add(x=>x.Login);
+                                          columns.Add(x=>x.Password).Titled("Hasło");
+                                          columns.Add(x=>x.Name).Titled("Imię");
+                                          columns.Add(x => x.Surname).Titled("Nazwisko");
+}).WithPaging(10).Sortable().Selectable(true)
+</p>

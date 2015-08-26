@@ -1,0 +1,543 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="KursyELearningDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Klasy">
+          <Key>
+            <PropertyRef Name="IdKlasy" />
+          </Key>
+          <Property Name="IdKlasy" Type="int" Nullable="false" />
+          <Property Name="Oddział" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdWychowawcy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kursy">
+          <Key>
+            <PropertyRef Name="IdKursu" />
+          </Key>
+          <Property Name="IdKursu" Type="int" Nullable="false" />
+          <Property Name="IdPrzedmiotu" Type="int" Nullable="false" />
+          <Property Name="IdProwadzącego" Type="int" Nullable="false" />
+          <Property Name="IdKlasy" Type="int" Nullable="false" />
+          <Property Name="Tytuł" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Opis" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Nauczyciele">
+          <Key>
+            <PropertyRef Name="IdProwadzącego" />
+          </Key>
+          <Property Name="IdProwadzącego" Type="int" Nullable="false" />
+          <Property Name="Imię" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Hasło" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Przedmioty">
+          <Key>
+            <PropertyRef Name="IdPrzedmiotu" />
+          </Key>
+          <Property Name="IdPrzedmiotu" Type="int" Nullable="false" />
+          <Property Name="NazwaPrzedmiotu" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rozwiązania">
+          <Key>
+            <PropertyRef Name="IdRozwiązania" />
+          </Key>
+          <Property Name="IdRozwiązania" Type="int" Nullable="false" />
+          <Property Name="IdUcznia" Type="int" Nullable="false" />
+          <Property Name="IdZadania" Type="int" Nullable="false" />
+          <Property Name="TreśćRozwiązania" Type="varbinary(max)" />
+          <Property Name="Ocena" Type="tinyint" />
+          <Property Name="Komentarz" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Uczniowie">
+          <Key>
+            <PropertyRef Name="IdUcznia" />
+          </Key>
+          <Property Name="IdUcznia" Type="int" Nullable="false" />
+          <Property Name="Imię" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Hasło" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdKlasy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Zadania">
+          <Key>
+            <PropertyRef Name="IdZadania" />
+          </Key>
+          <Property Name="IdZadania" Type="int" Nullable="false" />
+          <Property Name="IdKursu" Type="int" Nullable="false" />
+          <Property Name="Treść" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="DataWstawienia" Type="datetime" />
+          <Property Name="DataOddania" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Klasy_Nauczyciele">
+          <End Role="Nauczyciele" Type="Self.Nauczyciele" Multiplicity="1" />
+          <End Role="Klasy" Type="Self.Klasy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nauczyciele">
+              <PropertyRef Name="IdProwadzącego" />
+            </Principal>
+            <Dependent Role="Klasy">
+              <PropertyRef Name="IdWychowawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kursy_Klasy">
+          <End Role="Klasy" Type="Self.Klasy" Multiplicity="1" />
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klasy">
+              <PropertyRef Name="IdKlasy" />
+            </Principal>
+            <Dependent Role="Kursy">
+              <PropertyRef Name="IdKlasy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kursy_Nauczyciele">
+          <End Role="Nauczyciele" Type="Self.Nauczyciele" Multiplicity="1" />
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nauczyciele">
+              <PropertyRef Name="IdProwadzącego" />
+            </Principal>
+            <Dependent Role="Kursy">
+              <PropertyRef Name="IdProwadzącego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kursy_Przedmioty">
+          <End Role="Przedmioty" Type="Self.Przedmioty" Multiplicity="1" />
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Przedmioty">
+              <PropertyRef Name="IdPrzedmiotu" />
+            </Principal>
+            <Dependent Role="Kursy">
+              <PropertyRef Name="IdPrzedmiotu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rozwiązania_Uczniowie">
+          <End Role="Uczniowie" Type="Self.Uczniowie" Multiplicity="1" />
+          <End Role="Rozwiązania" Type="Self.Rozwiązania" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uczniowie">
+              <PropertyRef Name="IdUcznia" />
+            </Principal>
+            <Dependent Role="Rozwiązania">
+              <PropertyRef Name="IdUcznia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rozwiązania_Zadania">
+          <End Role="Zadania" Type="Self.Zadania" Multiplicity="1" />
+          <End Role="Rozwiązania" Type="Self.Rozwiązania" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zadania">
+              <PropertyRef Name="IdZadania" />
+            </Principal>
+            <Dependent Role="Rozwiązania">
+              <PropertyRef Name="IdZadania" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Uczniowie_Klasy">
+          <End Role="Klasy" Type="Self.Klasy" Multiplicity="1" />
+          <End Role="Uczniowie" Type="Self.Uczniowie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klasy">
+              <PropertyRef Name="IdKlasy" />
+            </Principal>
+            <Dependent Role="Uczniowie">
+              <PropertyRef Name="IdKlasy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zadania_Kursy">
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="1" />
+          <End Role="Zadania" Type="Self.Zadania" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kursy">
+              <PropertyRef Name="IdKursu" />
+            </Principal>
+            <Dependent Role="Zadania">
+              <PropertyRef Name="IdKursu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KursyELearningDBModelStoreContainer">
+          <EntitySet Name="Klasy" EntityType="Self.Klasy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kursy" EntityType="Self.Kursy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Nauczyciele" EntityType="Self.Nauczyciele" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Przedmioty" EntityType="Self.Przedmioty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rozwiązania" EntityType="Self.Rozwiązania" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Uczniowie" EntityType="Self.Uczniowie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zadania" EntityType="Self.Zadania" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Klasy_Nauczyciele" Association="Self.FK_Klasy_Nauczyciele">
+            <End Role="Nauczyciele" EntitySet="Nauczyciele" />
+            <End Role="Klasy" EntitySet="Klasy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kursy_Klasy" Association="Self.FK_Kursy_Klasy">
+            <End Role="Klasy" EntitySet="Klasy" />
+            <End Role="Kursy" EntitySet="Kursy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kursy_Nauczyciele" Association="Self.FK_Kursy_Nauczyciele">
+            <End Role="Nauczyciele" EntitySet="Nauczyciele" />
+            <End Role="Kursy" EntitySet="Kursy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kursy_Przedmioty" Association="Self.FK_Kursy_Przedmioty">
+            <End Role="Przedmioty" EntitySet="Przedmioty" />
+            <End Role="Kursy" EntitySet="Kursy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozwiązania_Uczniowie" Association="Self.FK_Rozwiązania_Uczniowie">
+            <End Role="Uczniowie" EntitySet="Uczniowie" />
+            <End Role="Rozwiązania" EntitySet="Rozwiązania" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozwiązania_Zadania" Association="Self.FK_Rozwiązania_Zadania">
+            <End Role="Zadania" EntitySet="Zadania" />
+            <End Role="Rozwiązania" EntitySet="Rozwiązania" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Uczniowie_Klasy" Association="Self.FK_Uczniowie_Klasy">
+            <End Role="Klasy" EntitySet="Klasy" />
+            <End Role="Uczniowie" EntitySet="Uczniowie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zadania_Kursy" Association="Self.FK_Zadania_Kursy">
+            <End Role="Kursy" EntitySet="Kursy" />
+            <End Role="Zadania" EntitySet="Zadania" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KursyELearningDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Klasy">
+          <Key>
+            <PropertyRef Name="IdKlasy" />
+          </Key>
+          <Property Name="IdKlasy" Type="Int32" Nullable="false" />
+          <Property Name="Oddział" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdWychowawcy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Nauczyciele" Relationship="Self.FK_Klasy_Nauczyciele" FromRole="Klasy" ToRole="Nauczyciele" />
+          <NavigationProperty Name="Kursy" Relationship="Self.FK_Kursy_Klasy" FromRole="Klasy" ToRole="Kursy" />
+          <NavigationProperty Name="Uczniowie" Relationship="Self.FK_Uczniowie_Klasy" FromRole="Klasy" ToRole="Uczniowie" />
+        </EntityType>
+        <EntityType Name="Kursy">
+          <Key>
+            <PropertyRef Name="IdKursu" />
+          </Key>
+          <Property Name="IdKursu" Type="Int32" Nullable="false" />
+          <Property Name="IdPrzedmiotu" Type="Int32" Nullable="false" />
+          <Property Name="IdProwadzącego" Type="Int32" Nullable="false" />
+          <Property Name="IdKlasy" Type="Int32" Nullable="false" />
+          <Property Name="Tytuł" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Opis" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Klasy" Relationship="Self.FK_Kursy_Klasy" FromRole="Kursy" ToRole="Klasy" />
+          <NavigationProperty Name="Nauczyciele" Relationship="Self.FK_Kursy_Nauczyciele" FromRole="Kursy" ToRole="Nauczyciele" />
+          <NavigationProperty Name="Przedmioty" Relationship="Self.FK_Kursy_Przedmioty" FromRole="Kursy" ToRole="Przedmioty" />
+          <NavigationProperty Name="Zadania" Relationship="Self.FK_Zadania_Kursy" FromRole="Kursy" ToRole="Zadania" />
+        </EntityType>
+        <EntityType Name="Nauczyciele">
+          <Key>
+            <PropertyRef Name="IdProwadzącego" />
+          </Key>
+          <Property Name="IdProwadzącego" Type="Int32" Nullable="false" />
+          <Property Name="Imię" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwisko" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Hasło" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Klasy" Relationship="Self.FK_Klasy_Nauczyciele" FromRole="Nauczyciele" ToRole="Klasy" />
+          <NavigationProperty Name="Kursy" Relationship="Self.FK_Kursy_Nauczyciele" FromRole="Nauczyciele" ToRole="Kursy" />
+        </EntityType>
+        <EntityType Name="Przedmioty">
+          <Key>
+            <PropertyRef Name="IdPrzedmiotu" />
+          </Key>
+          <Property Name="IdPrzedmiotu" Type="Int32" Nullable="false" />
+          <Property Name="NazwaPrzedmiotu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Kursy" Relationship="Self.FK_Kursy_Przedmioty" FromRole="Przedmioty" ToRole="Kursy" />
+        </EntityType>
+        <EntityType Name="Rozwiązania">
+          <Key>
+            <PropertyRef Name="IdRozwiązania" />
+          </Key>
+          <Property Name="IdRozwiązania" Type="Int32" Nullable="false" />
+          <Property Name="IdUcznia" Type="Int32" Nullable="false" />
+          <Property Name="IdZadania" Type="Int32" Nullable="false" />
+          <Property Name="TreśćRozwiązania" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Ocena" Type="Byte" />
+          <Property Name="Komentarz" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Uczniowie" Relationship="Self.FK_Rozwiązania_Uczniowie" FromRole="Rozwiązania" ToRole="Uczniowie" />
+          <NavigationProperty Name="Zadania" Relationship="Self.FK_Rozwiązania_Zadania" FromRole="Rozwiązania" ToRole="Zadania" />
+        </EntityType>
+        <EntityType Name="Uczniowie">
+          <Key>
+            <PropertyRef Name="IdUcznia" />
+          </Key>
+          <Property Name="IdUcznia" Type="Int32" Nullable="false" />
+          <Property Name="Imię" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Hasło" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdKlasy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Klasy" Relationship="Self.FK_Uczniowie_Klasy" FromRole="Uczniowie" ToRole="Klasy" />
+          <NavigationProperty Name="Rozwiązania" Relationship="Self.FK_Rozwiązania_Uczniowie" FromRole="Uczniowie" ToRole="Rozwiązania" />
+        </EntityType>
+        <EntityType Name="Zadania">
+          <Key>
+            <PropertyRef Name="IdZadania" />
+          </Key>
+          <Property Name="IdZadania" Type="Int32" Nullable="false" />
+          <Property Name="IdKursu" Type="Int32" Nullable="false" />
+          <Property Name="Treść" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DataWstawienia" Type="DateTime" Precision="3" />
+          <Property Name="DataOddania" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Kursy" Relationship="Self.FK_Zadania_Kursy" FromRole="Zadania" ToRole="Kursy" />
+          <NavigationProperty Name="Rozwiązania" Relationship="Self.FK_Rozwiązania_Zadania" FromRole="Zadania" ToRole="Rozwiązania" />
+        </EntityType>
+        <Association Name="FK_Klasy_Nauczyciele">
+          <End Role="Nauczyciele" Type="Self.Nauczyciele" Multiplicity="1" />
+          <End Role="Klasy" Type="Self.Klasy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nauczyciele">
+              <PropertyRef Name="IdProwadzącego" />
+            </Principal>
+            <Dependent Role="Klasy">
+              <PropertyRef Name="IdWychowawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kursy_Klasy">
+          <End Role="Klasy" Type="Self.Klasy" Multiplicity="1" />
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klasy">
+              <PropertyRef Name="IdKlasy" />
+            </Principal>
+            <Dependent Role="Kursy">
+              <PropertyRef Name="IdKlasy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Uczniowie_Klasy">
+          <End Role="Klasy" Type="Self.Klasy" Multiplicity="1" />
+          <End Role="Uczniowie" Type="Self.Uczniowie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klasy">
+              <PropertyRef Name="IdKlasy" />
+            </Principal>
+            <Dependent Role="Uczniowie">
+              <PropertyRef Name="IdKlasy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kursy_Nauczyciele">
+          <End Role="Nauczyciele" Type="Self.Nauczyciele" Multiplicity="1" />
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nauczyciele">
+              <PropertyRef Name="IdProwadzącego" />
+            </Principal>
+            <Dependent Role="Kursy">
+              <PropertyRef Name="IdProwadzącego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kursy_Przedmioty">
+          <End Role="Przedmioty" Type="Self.Przedmioty" Multiplicity="1" />
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Przedmioty">
+              <PropertyRef Name="IdPrzedmiotu" />
+            </Principal>
+            <Dependent Role="Kursy">
+              <PropertyRef Name="IdPrzedmiotu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zadania_Kursy">
+          <End Role="Kursy" Type="Self.Kursy" Multiplicity="1" />
+          <End Role="Zadania" Type="Self.Zadania" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kursy">
+              <PropertyRef Name="IdKursu" />
+            </Principal>
+            <Dependent Role="Zadania">
+              <PropertyRef Name="IdKursu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rozwiązania_Uczniowie">
+          <End Role="Uczniowie" Type="Self.Uczniowie" Multiplicity="1" />
+          <End Role="Rozwiązania" Type="Self.Rozwiązania" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uczniowie">
+              <PropertyRef Name="IdUcznia" />
+            </Principal>
+            <Dependent Role="Rozwiązania">
+              <PropertyRef Name="IdUcznia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rozwiązania_Zadania">
+          <End Role="Zadania" Type="Self.Zadania" Multiplicity="1" />
+          <End Role="Rozwiązania" Type="Self.Rozwiązania" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zadania">
+              <PropertyRef Name="IdZadania" />
+            </Principal>
+            <Dependent Role="Rozwiązania">
+              <PropertyRef Name="IdZadania" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KursyELearningDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Klasy" EntityType="Self.Klasy" />
+          <EntitySet Name="Kursy" EntityType="Self.Kursy" />
+          <EntitySet Name="Nauczyciele" EntityType="Self.Nauczyciele" />
+          <EntitySet Name="Przedmioty" EntityType="Self.Przedmioty" />
+          <EntitySet Name="Rozwiązania" EntityType="Self.Rozwiązania" />
+          <EntitySet Name="Uczniowie" EntityType="Self.Uczniowie" />
+          <EntitySet Name="Zadania" EntityType="Self.Zadania" />
+          <AssociationSet Name="FK_Klasy_Nauczyciele" Association="Self.FK_Klasy_Nauczyciele">
+            <End Role="Nauczyciele" EntitySet="Nauczyciele" />
+            <End Role="Klasy" EntitySet="Klasy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kursy_Klasy" Association="Self.FK_Kursy_Klasy">
+            <End Role="Klasy" EntitySet="Klasy" />
+            <End Role="Kursy" EntitySet="Kursy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Uczniowie_Klasy" Association="Self.FK_Uczniowie_Klasy">
+            <End Role="Klasy" EntitySet="Klasy" />
+            <End Role="Uczniowie" EntitySet="Uczniowie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kursy_Nauczyciele" Association="Self.FK_Kursy_Nauczyciele">
+            <End Role="Nauczyciele" EntitySet="Nauczyciele" />
+            <End Role="Kursy" EntitySet="Kursy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kursy_Przedmioty" Association="Self.FK_Kursy_Przedmioty">
+            <End Role="Przedmioty" EntitySet="Przedmioty" />
+            <End Role="Kursy" EntitySet="Kursy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zadania_Kursy" Association="Self.FK_Zadania_Kursy">
+            <End Role="Kursy" EntitySet="Kursy" />
+            <End Role="Zadania" EntitySet="Zadania" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozwiązania_Uczniowie" Association="Self.FK_Rozwiązania_Uczniowie">
+            <End Role="Uczniowie" EntitySet="Uczniowie" />
+            <End Role="Rozwiązania" EntitySet="Rozwiązania" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozwiązania_Zadania" Association="Self.FK_Rozwiązania_Zadania">
+            <End Role="Zadania" EntitySet="Zadania" />
+            <End Role="Rozwiązania" EntitySet="Rozwiązania" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KursyELearningDBModelStoreContainer" CdmEntityContainer="KursyELearningDBEntities">
+          <EntitySetMapping Name="Klasy">
+            <EntityTypeMapping TypeName="KursyELearningDBModel.Klasy">
+              <MappingFragment StoreEntitySet="Klasy">
+                <ScalarProperty Name="IdKlasy" ColumnName="IdKlasy" />
+                <ScalarProperty Name="Oddział" ColumnName="Oddział" />
+                <ScalarProperty Name="IdWychowawcy" ColumnName="IdWychowawcy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kursy">
+            <EntityTypeMapping TypeName="KursyELearningDBModel.Kursy">
+              <MappingFragment StoreEntitySet="Kursy">
+                <ScalarProperty Name="IdKursu" ColumnName="IdKursu" />
+                <ScalarProperty Name="IdPrzedmiotu" ColumnName="IdPrzedmiotu" />
+                <ScalarProperty Name="IdProwadzącego" ColumnName="IdProwadzącego" />
+                <ScalarProperty Name="IdKlasy" ColumnName="IdKlasy" />
+                <ScalarProperty Name="Tytuł" ColumnName="Tytuł" />
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Nauczyciele">
+            <EntityTypeMapping TypeName="KursyELearningDBModel.Nauczyciele">
+              <MappingFragment StoreEntitySet="Nauczyciele">
+                <ScalarProperty Name="IdProwadzącego" ColumnName="IdProwadzącego" />
+                <ScalarProperty Name="Imię" ColumnName="Imię" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Hasło" ColumnName="Hasło" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Przedmioty">
+            <EntityTypeMapping TypeName="KursyELearningDBModel.Przedmioty">
+              <MappingFragment StoreEntitySet="Przedmioty">
+                <ScalarProperty Name="IdPrzedmiotu" ColumnName="IdPrzedmiotu" />
+                <ScalarProperty Name="NazwaPrzedmiotu" ColumnName="NazwaPrzedmiotu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rozwiązania">
+            <EntityTypeMapping TypeName="KursyELearningDBModel.Rozwiązania">
+              <MappingFragment StoreEntitySet="Rozwiązania">
+                <ScalarProperty Name="IdRozwiązania" ColumnName="IdRozwiązania" />
+                <ScalarProperty Name="IdUcznia" ColumnName="IdUcznia" />
+                <ScalarProperty Name="IdZadania" ColumnName="IdZadania" />
+                <ScalarProperty Name="TreśćRozwiązania" ColumnName="TreśćRozwiązania" />
+                <ScalarProperty Name="Ocena" ColumnName="Ocena" />
+                <ScalarProperty Name="Komentarz" ColumnName="Komentarz" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Uczniowie">
+            <EntityTypeMapping TypeName="KursyELearningDBModel.Uczniowie">
+              <MappingFragment StoreEntitySet="Uczniowie">
+                <ScalarProperty Name="IdUcznia" ColumnName="IdUcznia" />
+                <ScalarProperty Name="Imię" ColumnName="Imię" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Hasło" ColumnName="Hasło" />
+                <ScalarProperty Name="IdKlasy" ColumnName="IdKlasy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zadania">
+            <EntityTypeMapping TypeName="KursyELearningDBModel.Zadania">
+              <MappingFragment StoreEntitySet="Zadania">
+                <ScalarProperty Name="IdZadania" ColumnName="IdZadania" />
+                <ScalarProperty Name="IdKursu" ColumnName="IdKursu" />
+                <ScalarProperty Name="Treść" ColumnName="Treść" />
+                <ScalarProperty Name="DataWstawienia" ColumnName="DataWstawienia" />
+                <ScalarProperty Name="DataOddania" ColumnName="DataOddania" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
