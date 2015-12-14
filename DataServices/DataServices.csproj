@@ -56,8 +56,11 @@
     </Compile>
     <Compile Include="UserServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AdminLogin.cs" />
     <Compile Include="ViewModels\ClassModel.cs" />
+    <Compile Include="ViewModels\LoggedUserModel.cs" />
     <Compile Include="ViewModels\StudentModel.cs" />
+    <Compile Include="ViewModels\TeacherModel.cs" />
     <Compile Include="ViewModels\UserLoginModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +70,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

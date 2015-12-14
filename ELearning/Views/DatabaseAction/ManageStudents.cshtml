@@ -3,10 +3,9 @@
 
 @{
     ViewBag.Title = "ManageStudents";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ManageStudents</h2>
+<h2>Zarządzaj uczniami w bazie danych</h2>
 
 <p>
     @Html.ActionLink("Dodaj nowego ucznia", "AddNewStudent")
@@ -16,6 +15,10 @@
                                           columns.Add(x=>x.Login);
                                           columns.Add(x=>x.Password).Titled("Hasło");
                                           columns.Add(x=>x.Name).Titled("Imię");
-                                          columns.Add(x => x.Surname).Titled("Nazwisko");
+                                          columns.Add(x=>x.Surname).Titled("Nazwisko");
+                                          columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "DeleteStudent", new { IdUcznia = o.IdUcznia }));
+                                          columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Zmień", "EditStudent", new { IdUcznia = o.IdUcznia }));
+
+
 }).WithPaging(10).Sortable().Selectable(true)
 </p>

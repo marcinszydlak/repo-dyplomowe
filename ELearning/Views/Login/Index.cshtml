@@ -1,14 +1,12 @@
 ﻿@model DataServices.ViewModels.UserLoginModel
 
 @{
-    Layout= "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Index";
 }
-
 <h2> Logowanie do serwisu</h2>
 <text style="color:red">@ViewBag.Message</text>
 <form method="post">
     <h3>@Html.EditorFor(m => m.Login)</h3>
     <h3>@Html.PasswordFor(m => m.Password)</h3>
-    <input type="submit" formmethod="post" value="Zaloguj się" />
+    <input type="submit" method="post" value="Zaloguj się" />
 </form>

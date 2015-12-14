@@ -1,0 +1,87 @@
+﻿@model DataServices.ViewModels.StudentModel
+
+@{
+    ViewBag.Title = "DeleteStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if(Session["admin"]!= null)
+{
+<h2>Usuń ucznia : @Model.ToString()</h2>
+
+<h3>Czy jesteś pewien że chcesz usunąć ten wpis z bazy?</h3>
+<div>
+    <h4>Dane : </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IdUcznia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdUcznia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Surname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Surname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IdKlasy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdKlasy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Klasa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Klasa)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" />
+            @Html.ActionLink("Back to List", "ManageStudents",null,new { @class = "btn btn-default"})
+        </div>
+    }
+</div>
+}
+else
+{
+    <h2>Nie masz uprawnien do przegladania zawartosci</h2>
+}

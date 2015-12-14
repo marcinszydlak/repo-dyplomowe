@@ -1,19 +1,79 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
 </head>
 <body>
-    @RenderBody()
-    <script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")" type="text/javascript"> </script>
-    <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" type="text/css" />
-    <script src="@Url.Content("~/Scripts/gridmvc.min.js")" type="text/javascript"> </script>
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("E-Learning", "Main", "MainPage", null, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Administracja", "Index", "DatabaseAction")</li>
+                    @if(Session["zalogowany"]!=null)
+                    {
+                        <li>@Html.ActionLink("Kursy", "#", "#")</li>
+                        <li>@Html.ActionLink("Wyloguj się", "Logout", "Login")</li>
+                    }
+                    else
+                    {
+                        if (Session["admin"] != null && Request.Cookies["Admin"] != null)
+                        {
+                            <li>@Html.ActionLink("Zarządzaj uczniami w bazie danych", "ManageStudents")</li>
+                            <li>@Html.ActionLink("Zarządzaj nauczycielami w bazie danych", "ManageTeachers")</li>
+                            <li>@Html.ActionLink("Zmień dane dotyczące klasy", "UpdateClass")</li>
+                        }
+                        else
+                        { 
+                        <li>@Html.ActionLink("Zaloguj się", "Index", "Login")</li>
+                        }
+                    }
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        @if (Session["zalogowany"] != null && Request.Cookies["LoggedUser"]!=null)
+        {
+            <div class="navbar-left">
+                <ul class="nav nav-pills nav-stacked">
+                    <li role="presentation">@Html.ActionLink("Zmień dane profilowe","EditStudent","Student")</li>
+                    <li role="presentation">@Html.ActionLink("Przeglądaj swoje kursy","#","#")</li>
+                    <li role="presentation">@Html.ActionLink("Podgląd ocen","#","#")</li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            if(Session["admin"] == null && Request.Cookies["Admin"]==null && Session["zalogowany"] != null && Request.Cookies["LoggedUser"] != null) 
+            {
+                <div>Nie masz uprawnień aby oglądać zawartość</div>
+            }
+        }
+        <hr/>
+
+    </div>
+
+
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <footer>
+        <p class="col-md-offset-5">&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    </footer>
 </body>
 </html>

@@ -142,6 +142,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseActionController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MainPageController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -218,7 +220,9 @@
     <Content Include="Scripts\knockout-3.3.0.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -237,10 +241,19 @@
     <Content Include="Views\DatabaseAction\ManageStudents.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
+    <Content Include="Views\DatabaseAction\DeleteStudent.cshtml" />
+    <Content Include="Views\DatabaseAction\EditStudent.cshtml" />
+    <Content Include="Views\Student\Index.cshtml" />
+    <Content Include="Views\DatabaseAction\ManageTeachers.cshtml" />
+    <Content Include="Views\Student\EditStudent.cshtml" />
+    <Content Include="Views\DatabaseAction\AddNewTeacher.cshtml" />
+    <Content Include="Views\DatabaseAction\EditTeacher.cshtml" />
+    <Content Include="Views\MainPage\Main.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\EditProfile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -265,7 +278,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2138</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

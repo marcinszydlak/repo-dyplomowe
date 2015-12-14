@@ -1,19 +1,30 @@
 ﻿@model DataServices.ViewModels.StudentModel
-@using GridMvc.Html
-@{
-    ViewBag.Title = "AddNewStudent";
-}
-@if(Session["admin"]!= null)
-{ 
-<h2>AddNewStudent</h2>
 
-using (Html.BeginForm()) 
+@{
+    ViewBag.Title = "EditStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if(Session["admin"]!=null)
+{
+<h2>EditStudent</h2>
+
+
+using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Moduł rejestracji ucznia</h4>
+        <h4>Zmień dane w profilu ucznia : @Model.ToString()</h4>
         <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdUcznia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IdUcznia, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdUcznia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -49,24 +60,23 @@ using (Html.BeginForm())
         <div class="form-group">
             @Html.LabelFor(model => model.IdKlasy, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model =>model.IdKlasy,new SelectList(@Model.Oddziały,"IdKlasy","Oddział"))
+                @Html.DropDownListFor(model => model.IdKlasy, new SelectList(@Model.Oddziały, "IdKlasy", "Oddział"))
                 @Html.ValidationMessageFor(model => model.IdKlasy, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "ManageStudents")
 </div>
 }
-else
-{
-    <h2>Nie masz uprawnień do przeglądania zawartości</h2>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

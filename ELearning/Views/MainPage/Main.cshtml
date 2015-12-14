@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Main";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Witamy w serwisie zarządzania E-Learning</h1>
+<hr />
+<table>
+    <tr>
+        <td><h4 class="col-md-6">Jeśli chcesz się dowiedzieć czegoś o autorze, kliknij tutaj :</h4></td>
+        <td><h4 class="col-md-6">Jeśli chcesz podzielić się jakąś uwagą :</h4></td>
+    </tr>
+    <tr>
+        <td> @Html.ActionLink("O autorze", "About", null, new { @class = "btn btn-default" }) </td>
+        <td> <a href="mailto:marcinszydlak93@wp.pl" class="btn btn-default">Napisz </a></td>
+    </tr>
+</table>

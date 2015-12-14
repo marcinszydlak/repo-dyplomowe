@@ -1,17 +1,24 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@model DataServices.ViewModels.AdminLogin
+    @{
+        ViewBag.Title = "Index";
+    }
 
-<h2>Panel aministracyjny</h2>
-<hr/>
-@Html.ActionLink("Zarządzaj uczniami w bazie danych","ManageStudents")
-<!--@Html.ActionLink("Zarządzaj uczniami w bazie danych", "AddNewStudent")
-@Html.ActionLink("Zarejestruj nauczyciel w bazie danych","RegisterNewTeacher")
-@Html.ActionLink("Utwórz nową klasę","RegisterNewClass")
-@Html.ActionLink("Zmień dane o uczniu","UpdateStudent")-->
-@Html.ActionLink("Zmień dane o nauczycielu","UpdateTeacher")
-@Html.ActionLink("Zmień dane dotyczące klasy","UpdateClass")-->
-
+    <h2>Panel administracyjny</h2>
+    <hr />
+    <h4>
+        @if(Session["admin"] != null)
+        { 
+            @Html.ActionLink("Zarządzaj uczniami w bazie danych", "ManageStudents")<br />
+            @Html.ActionLink("Zarządzaj nauczycielami w bazie danych", "ManageTeachers")<br />
+            @Html.ActionLink("Zmień dane dotyczące klasy", "UpdateClass")
+        }
+        else
+        {
+            <form method="post">
+                <h3>@Html.EditorFor(m => m.Login)</h3>
+                <h3>@Html.PasswordFor(m => m.Password)</h3>
+                <input type="submit" method="post" value="Zaloguj się" />
+            </form>
+        }
+    </h4>
 

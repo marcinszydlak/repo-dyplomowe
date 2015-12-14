@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DataServices.ViewModels.TeacherModel>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "ManageTeachers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Zarządzaj nauczycielami w bazie danych</h2>
+
+<p>
+    @Html.ActionLink("Dodaj nowego nauczyciela", "AddNewTeacher")
+    @Html.Grid(Model).Named("StudentList").Columns(columns =>
+{
+    columns.Add(x => x.IdNauczyciela);
+    columns.Add(x => x.Imię);
+    columns.Add(x => x.Nazwisko);
+    columns.Add(x => x.Login);
+    columns.Add(x => x.Hasło).Titled("Hasło");
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "DeleteTeacher", new { IdNauczyciela = o.IdNauczyciela }));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Zmień", "EditTeacher", new { IdNauczyciela = o.IdNauczyciela }));
+
+
+}).WithPaging(10).Sortable().Selectable(true)
+</p>
+
