@@ -20,24 +20,74 @@ namespace DataServices
         {
             try
             {
-                var query = db.Uczniowie.Where(x => x.Login == Login && x.Hasło == Password).FirstOrDefault();
-                if (query != null)
+                var studentquery = db.Uczniowie.Where(x => x.Login == Login && x.Hasło == Password).FirstOrDefault();
+                if (studentquery != null)
                 {
                     UserLoginModel ulm = new UserLoginModel
                     {
-                        Login = query.Login,
-                        Name = query.Imię,
-                        Surname = query.Nazwisko,
-                        Password = query.Hasło
+                        Login = studentquery.Login,
+                        Name = studentquery.Imię,
+                        Surname = studentquery.Nazwisko,
+                        Password = studentquery.Hasło
                     };
                     return ulm;
                 }
                 else
                 {
+                    var teacherquery = db.Nauczyciele.Where(x => x.Login == Login && x.Hasło == Password).FirstOrDefault();
+                    if (teacherquery != null)
+                    {
+                        UserLoginModel ulm = new UserLoginModel
+                        {
+                            Login = teacherquery.Login,
+                            Name = teacherquery.Imię,
+                            Surname = teacherquery.Nazwisko,
+                            Password = teacherquery.Hasło
+                        };
+                        return ulm;
+                    }
                     return null;
                 }
             }
             catch 
+            {
+                return null;
+            }
+        }
+
+        public UserLoginModel GetLoggedUser(string Login)
+        {
+            try
+            {
+                var studentquery = db.Uczniowie.Where(x => x.Login == Login).FirstOrDefault();
+                if (studentquery != null)
+                {
+                    UserLoginModel ulm = new UserLoginModel
+                    {
+                        Login = studentquery.Login,
+                        Name = studentquery.Imię,
+                        Surname = studentquery.Nazwisko
+
+                    };
+                    return ulm;
+                }
+                else
+                {
+                    var teacherquery = db.Nauczyciele.Where(x => x.Login == Login).FirstOrDefault();
+                    if (teacherquery != null)
+                    {
+                        UserLoginModel ulm = new UserLoginModel
+                        {
+                            Login = teacherquery.Login,
+                            Name = teacherquery.Imię,
+                            Surname = teacherquery.Nazwisko
+                        };
+                        return ulm;
+                    }
+                    return null;
+                }
+            }
+            catch
             {
                 return null;
             }
@@ -97,7 +147,6 @@ namespace DataServices
                 Imię = model.Name,
                 Nazwisko = model.Surname,
                 IdKlasy = model.IdKlasy
-                
             });
             db.SaveChanges();
         }
@@ -150,6 +199,34 @@ namespace DataServices
             query.Nazwisko = model.Surname;
             db.SaveChanges();
         }
+        //Aktualizacja po zmianie hasła
+        public void ChangePassword(string login,string name,string surname,string newPassword)
+        {
+            if(ExistsStudentInDatabase(login,name,surname))
+            {
+                var query = db.Uczniowie.Where(x => x.Login == login && x.Imię == name && x.Nazwisko == surname).FirstOrDefault();
+                {
+                    query.Hasło = newPassword;
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                if(ExistsTeacherInDatabase(login,name,surname))
+                {
+                    var query = db.Nauczyciele.Where(x => x.Login == login && x.Imię == name && x.Nazwisko == surname).FirstOrDefault();
+                    {
+                        query.Hasło = newPassword;
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+        public bool ExistsStudentInDatabase(string login,string name,string surname)
+        {
+            var query = db.Uczniowie.Where(x =>x.Login == login && x.Imię == name && x.Nazwisko == surname).FirstOrDefault();
+            return query != null ? true : false;  
+        }
         #endregion
         #region Nauczyciele
         //Pobranie listy nauczycieli z bazy danych
@@ -181,6 +258,17 @@ namespace DataServices
             Teacher.Hasło = query.Hasło;
             return Teacher;
         }
+        public TeacherModel GetTeacher(string Name, string Surname, string Login)
+        {
+            var item = db.Nauczyciele.Where(x => x.Imię == Name && x.Nazwisko == Surname && x.Login == Login).FirstOrDefault();
+            TeacherModel model = new TeacherModel();
+            model.IdNauczyciela = item.IdProwadzącego;
+            model.Imię= item.Imię;
+            model.Nazwisko = item.Nazwisko;
+            model.Login = item.Login;
+            model.Hasło = item.Hasło;
+            return model;
+        }
         //Stworzenie nowego rekordu nauczyciela na podstawie bazy danych
         public void CreateNewTeacher(string Login, string Password, string Name, string Surname)
         {
@@ -200,6 +288,11 @@ namespace DataServices
         public void UpdateTeacher(int IdNauczyciela)
         {
             Nauczyciele nauczyciel = db.Nauczyciele.ElementAt(IdNauczyciela);
+        }
+        public bool ExistsTeacherInDatabase(string login, string name, string surname)
+        {
+            var query = db.Nauczyciele.Where(x => x.Login == login && x.Imię == name && x.Nazwisko == surname);
+            return query != null ? true : false;
         }
     }
 }

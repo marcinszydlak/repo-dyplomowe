@@ -6,7 +6,9 @@
 <h2> Logowanie do serwisu</h2>
 <text style="color:red">@ViewBag.Message</text>
 <form method="post">
-    <h3>@Html.EditorFor(m => m.Login)</h3>
-    <h3>@Html.PasswordFor(m => m.Password)</h3>
-    <input type="submit" method="post" value="Zaloguj się" />
+    <div class="col-md-4">
+        <h3>@Html.EditorFor(m => m.Login, new { htmlAttributes = new { @class = "form-control" } })</h3>
+        <h3>@Html.PasswordFor(m => m.Password, htmlAttributes: new { @class = "form-control" })</h3>
+        <input type="submit" method="post" value="Zaloguj się" />
+    </div>
 </form>

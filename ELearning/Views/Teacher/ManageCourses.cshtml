@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DataServices.ViewModels.CourseModel>
+
+@{
+    ViewBag.Title = "ManageCourses";
+    Layout = "~/Views/Shared/Teacher.cshtml";
+}
+
+<h2>ManageCourses</h2>
+
+<p>
+    @Html.ActionLink("Dodaj nowy kurs", "CreateCourse")
+    @Html.Grid(Model).Named("CourseList").Columns(columns =>
+{
+    columns.Add(x => x.CourseId).Titled("IdKursu");
+    columns.Add(x => x.Class).Titled("Klasa");
+    columns.Add(x => x.CourseTitle).Titled("Tytuł kursu");
+    columns.Add(x => x.CourseDescription).Titled("Opis kursu");
+    columns.Add(x => x.Subject).Titled("Przedmiot");
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "DeleteStudent"));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Zmień", "EditStudent"));
+
+
+}).WithPaging(10).Sortable().Selectable(true)
+</p>
+

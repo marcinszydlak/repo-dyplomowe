@@ -21,17 +21,21 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    
-                    @if (Session["zalogowany"] != null && Request.Cookies["LoggedUser"] != null)
-                    {
-                        <li>@Html.ActionLink("Podejrzyj swój profil","Index","Student")</li>
-                        <li>@Html.ActionLink("Wyloguj się", "Logout", "Login")</li>
+                    <li>@Html.ActionLink("Administracja", "Index", "DatabaseAction")</li>
+                    @if(Session["admin"]!=null)
+                    { 
+                    <li>@Html.ActionLink("Zarządzaj uczniami w bazie danych", "ManageStudents")</li>
+                    <li>@Html.ActionLink("Zarządzaj nauczycielami w bazie danych", "ManageTeachers")</li>
+                    <li>@Html.ActionLink("Zmień dane dotyczące klasy", "UpdateClass")</li>
+                    <li>@Html.ActionLink("Wyloguj się", "Logout", "DatabaseAction")</li>
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Administracja", "Index", "DatabaseAction")</li>
                         <li>@Html.ActionLink("Zaloguj się", "Index", "Login")</li>
                     }
+                    
+
+
                 </ul>
             </div>
 
@@ -40,21 +44,7 @@
     <div class="container body-content">
         @RenderBody()
 
-            @*<div class="navbar-left">
-                <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation">@Html.ActionLink("Zmień dane profilowe","EditStudent","Student")</li>
-                    <li role="presentation">@Html.ActionLink("Przeglądaj swoje kursy","#","#")</li>
-                    <li role="presentation">@Html.ActionLink("Podgląd ocen","#","#")</li>
-                </ul>
-            </div>
-        
-        @*else
-        {
-            if(Session["admin"] == null && Request.Cookies["Admin"]==null && Session["zalogowany"] != null && Request.Cookies["LoggedUser"] != null) 
-            {
-                <div>Nie masz uprawnień aby oglądać zawartość</div>
-            }
-        }*@
+
         <hr/>
 
     </div>

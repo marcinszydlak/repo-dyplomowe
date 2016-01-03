@@ -15,11 +15,21 @@ namespace ELearning.Controllers
         [HttpGet]
         public ActionResult Index(UserLoginModel model)
         {
+
             LoggedUserModel user = new LoggedUserModel();
-            user.Name = model.Name;
-            user.Surname = model.Surname;
-            user.Login = model.Login;
-            
+            UserServices services = new UserServices();
+            if(Session["zalogowany"] != null && Request.Cookies["LoggedUser"] !=null && model.Login == null && model.Password == null)
+            {
+                user.Login = Request.Cookies["LoggedUser"].Values.Get("Login");
+                user.Name = Request.Cookies["LoggedUser"].Values.Get("Name");
+                user.Surname = Request.Cookies["LoggedUser"].Values.Get("Surname");
+            }
+            else
+            {
+                user.Login = model.Login;
+                user.Name = model.Name;
+                user.Surname = model.Surname;
+            }
             return View(user);
         }
         [HttpGet]
@@ -37,8 +47,11 @@ namespace ELearning.Controllers
         [HttpPost]
         public ActionResult EditStudent(StudentModel model)
         {
+            HttpCookie loggedStudent = Request.Cookies["LoggedUser"];
             UserServices services = new UserServices();
-            services.UpdateStudent(model);
+            StudentModel student = services.GetStudent(loggedStudent.Values.Get("Name"), loggedStudent.Values.Get("Surname"), loggedStudent.Values.Get("Login"));
+            services.ChangePassword(student.Login, student.Name, student.Surname, model.Password);
+
             UserLoginModel logged = new UserLoginModel();
             logged.Login = model.Login;
             logged.Name = model.Name;

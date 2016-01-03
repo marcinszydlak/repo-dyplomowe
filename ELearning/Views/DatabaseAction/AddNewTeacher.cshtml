@@ -1,8 +1,9 @@
 ﻿@model DataServices.ViewModels.TeacherModel
 @using GridMvc.Html
-@{
-    ViewBag.Title = "AddNewTeacher";
-}
+    @{
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/Admin.cshtml"; 
+    }
 @if(Session["admin"]!= null)
 { 
 <h2>AddNewTeacher</h2>

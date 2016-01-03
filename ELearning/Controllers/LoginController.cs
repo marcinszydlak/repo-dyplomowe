@@ -17,6 +17,22 @@ namespace ELearning.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            UserServices service = new UserServices();
+
+            if (Request.Cookies.Get("LoggedUser") != null)
+            {
+
+                UserLoginModel model = service.GetLoggedUser(Request.Cookies.Get("LoggedUser").Values.Get("Login"));
+                if(Session["zalogowany"]!= null)
+                    if (service.ExistsStudentInDatabase(Request.Cookies.Get("LoggedUser").Values.Get("Login"), Request.Cookies.Get("LoggedUser").Values.Get("Name"), Request.Cookies.Get("LoggedUser").Values.Get("Surname")))
+                    {
+                        return RedirectToAction("Index", "Student", model);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Teacher", model);
+                    }
+            }
             return View();
         }
         [HttpPost]
@@ -38,7 +54,14 @@ namespace ELearning.Controllers
                 cookie.Values.Add("Login",model.Login);
                 cookie.Expires = DateTime.Now.AddDays(1.0);
                 Response.Cookies.Add(cookie);
-                return RedirectToAction("Index","Student", user);
+                if (service.ExistsStudentInDatabase(user.Login, user.Name, user.Surname))
+                {
+                    return RedirectToAction("Index", "Student", user);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Teacher", user);
+                }
             }
             else
             {

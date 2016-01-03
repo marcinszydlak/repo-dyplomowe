@@ -126,5 +126,12 @@ namespace ELearning.Controllers
             return View(model);
         }
         #endregion
+        [HttpGet]
+        public ActionResult Logout()
+        {
+                Request.Cookies.Remove("Admin");
+                Session.Remove("admin");
+                return RedirectToAction("Main", "MainPage");
+        }
     }
 }
