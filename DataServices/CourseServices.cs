@@ -68,6 +68,53 @@ namespace DataServices
             }
             return kursy;
         }
+
+        public CourseModel GetCourse(int CourseId)
+        {
+            var course = db.Kursy.Where(x => x.IdKursu == CourseId).FirstOrDefault();
+            CourseModel model = new CourseModel();
+            model.CourseId = course.IdKursu;
+            model.ClassId = course.IdKlasy;
+            model.Class = db.Klasy.Where(x => x.IdKlasy == course.IdKlasy).Select(p => p.Oddział).FirstOrDefault();
+            model.CourseDescription = course.Opis;
+            model.CourseTitle = course.Tytuł;
+            model.SubjectId = course.IdPrzedmiotu;
+            model.Subject = db.Przedmioty.Where(x => x.IdPrzedmiotu == course.IdPrzedmiotu).Select(p => p.NazwaPrzedmiotu).FirstOrDefault();
+            var tasks = db.Zadania.Where(x => x.IdKursu == CourseId).ToList();
+            model.Tasks = new List<TaskModel>();
+            foreach(var task in tasks)
+            {
+                model.Tasks.Add(new TaskModel
+                {
+                    CourseId = task.IdKursu,
+                    CreationDate = (DateTime)task.DataWstawienia,
+                    DeadLineDate = (DateTime)task.DataOddania,
+                    Descriprion = task.Treść,
+                    TaskId = task.IdZadania
+                });
+            }
+            UserServices us = new UserServices();
+            model.Subjects = GetSubjects();
+            model.Classes = us.GetClasses();
+            return model;
+        }
+
+        public void CourseEdit(CourseModel model)
+        {
+            var editedCourse = db.Kursy.Where(x => x.IdKursu == model.CourseId).FirstOrDefault();
+            editedCourse.IdKlasy = model.ClassId;
+            editedCourse.IdPrzedmiotu = model.SubjectId;
+            editedCourse.Opis = model.CourseDescription;
+            editedCourse.Tytuł = model.CourseTitle;
+            db.SaveChanges();
+        }
+
+        public void CourseDelete(CourseModel model)
+        {
+            var CourseToDelete = db.Kursy.Where(x => x.IdKursu == model.CourseId).FirstOrDefault();
+            db.Kursy.Remove(CourseToDelete);
+            db.SaveChanges();
+        }
         #endregion
         #region Tasks
         public void NewTask(TaskModel model)
@@ -80,6 +127,13 @@ namespace DataServices
                 DataWstawienia = model.CreationDate,
                 Treść = model.Descriprion
             });
+            db.SaveChanges();
+        }
+        public void EditTask(TaskModel model)
+        {
+            var TaskToEdit = db.Zadania.Where(x => x.IdZadania == model.TaskId).FirstOrDefault();
+            TaskToEdit.DataOddania = model.DeadLineDate;
+            TaskToEdit.Treść = model.Descriprion;
             db.SaveChanges();
         }
         public TaskModel GetTask(int TaskId)
@@ -112,16 +166,68 @@ namespace DataServices
         }
         #endregion
         #region Solutions
-        public void newSolution(SolutionModel model)
+        public void NewSolution(SolutionModel model)
         {
             db.Rozwiązania.Add(new Rozwiązania()
             {
-                IdRozwiązania = model.SolutionId,
+                IdRozwiązania = db.Rozwiązania.Max(x => x.IdRozwiązania)+1,
                 IdUcznia = model.StudentId,
                 IdZadania = model.TaskId,
-                //TreśćRozwiązania = ,
+                TreśćRozwiązania = model.Solution,
+                DataWstawienia = DateTime.Now,
+                NazwaPliku = model.FileName,
+                Rozszerzenie = model.FileName.Split(new Char[] { '.'}).Last()
             });
+            db.SaveChanges();
             
+        }
+
+        public SolutionModel GetSolution(int SolutionId)
+        {
+            var query = db.Rozwiązania.Where(x => x.IdRozwiązania == SolutionId).FirstOrDefault();
+            UserServices us = new UserServices();
+            SolutionModel model = new SolutionModel{
+                SolutionId = query.IdRozwiązania,
+                StudentId = query.IdUcznia,
+                TaskId = query.IdZadania,
+                Solution = query.TreśćRozwiązania,
+                FileName = query.NazwaPliku,
+                Extension = query.Rozszerzenie,
+                Comment = query.Komentarz,
+                Note = query.Ocena,
+                Student = us.GetStudent(query.IdUcznia)
+            };
+            return model;
+        }
+        public List<SolutionModel> GetSolutions(int TaskId)
+        {
+            var query = db.Rozwiązania.Where(x => x.IdZadania == TaskId).ToList();
+            List<SolutionModel> solutions = new List<SolutionModel>();
+            UserServices us = new UserServices();
+            foreach (var item in query)
+            {
+                var uczen = db.Uczniowie.Where(x => x.IdUcznia == item.IdUcznia).FirstOrDefault();
+                solutions.Add(new SolutionModel
+                {
+                    TaskId = item.IdZadania,
+                    StudentId = item.IdUcznia,
+                    SolutionId = item.IdRozwiązania,
+                    Solution = item.TreśćRozwiązania,
+                    FileName = item.NazwaPliku,
+                    Extension = item.Rozszerzenie,
+                    Comment = item.Komentarz,
+                    Note = (byte?)item.Ocena,
+                    Student = us.GetStudent(item.IdUcznia)
+                });
+            }
+            return solutions;
+        }
+        public void EditNote(SolutionModel model)
+        {
+            var query = db.Rozwiązania.Where(x => x.IdRozwiązania == model.SolutionId).FirstOrDefault();
+            query.Komentarz = model.Comment;
+            query.Ocena = model.Note;
+            db.SaveChanges();
         }
         #endregion
         #region Subjects
@@ -139,7 +245,7 @@ namespace DataServices
             }
             return subjects;
         }
+
         #endregion
     }
-
 }

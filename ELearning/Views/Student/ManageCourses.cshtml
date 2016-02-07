@@ -2,23 +2,20 @@
 
 @{
     ViewBag.Title = "ManageCourses";
-    Layout = "~/Views/Shared/Teacher.cshtml";
+    Layout = "~/Views/Shared/Student.cshtml";
 }
 
 <h2>ManageCourses</h2>
 
 <p>
-    @Html.ActionLink("Dodaj nowy kurs", "CreateCourse")
     @Html.Grid(Model).Named("CourseList").Columns(columns =>
 {
     columns.Add(x => x.CourseId).Titled("IdKursu");
-    columns.Add(x => x.Class).Titled("Klasa");
+
     columns.Add(x => x.CourseTitle).Titled("Tytuł kursu");
     columns.Add(x => x.CourseDescription).Titled("Opis kursu");
     columns.Add(x => x.Subject).Titled("Przedmiot");
-    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "CourseDelete","Course", new { CourseId = o.CourseId },null));
-    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Zmień", "CourseEdit","Course",new { CourseId = o.CourseId},null));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Zmień", "TaskList", "Student", new { CourseId = o.CourseId }, null));
     columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Wejdź", "ManageTasks", "Course", new { CourseId = o.CourseId }, null));
 }).WithPaging(10).Sortable().Selectable(true)
 </p>
-

@@ -38,7 +38,7 @@ namespace ELearning.Controllers
             UserServices services = new UserServices();
 
 
-            teacher = services.GetTeacher(loggedTeacher.Values.Get("Name"), loggedTeacher.Values.Get("Surname"), loggedTeacher.Values.Get("Login"));
+            teacher = services.GetTeacher(loggedTeacher.Values.Get("Login"));
             return View(teacher);
         }
         [HttpPost]
@@ -46,7 +46,7 @@ namespace ELearning.Controllers
         {
             HttpCookie loggedTeacher = Request.Cookies["LoggedUser"];
             UserServices services = new UserServices();
-            TeacherModel teacher = services.GetTeacher(loggedTeacher.Values.Get("Name"), loggedTeacher.Values.Get("Surname"), loggedTeacher.Values.Get("Login"));
+            TeacherModel teacher = services.GetTeacher(loggedTeacher.Values.Get("Login"));
             services.ChangePassword(teacher.Login, teacher.Imię, teacher.Nazwisko, model.Hasło);
 
             UserLoginModel logged = new UserLoginModel();
@@ -72,7 +72,7 @@ namespace ELearning.Controllers
             CourseServices CourseServ = new CourseServices();
             UserServices UserServ = new UserServices();
             HttpCookie loggedTeacher = Request.Cookies["LoggedUser"];
-            TeacherModel teacher = UserServ.GetTeacher(loggedTeacher.Values.Get("Name"), loggedTeacher.Values.Get("Surname"), loggedTeacher.Values.Get("Login"));
+            TeacherModel teacher = UserServ.GetTeacher(loggedTeacher.Values.Get("Login"));
             newCourse.TeacherId = teacher.IdNauczyciela;
             CourseServ.NewCourse(newCourse);
             return RedirectToAction("Index", "Teacher");
@@ -84,9 +84,10 @@ namespace ELearning.Controllers
             CourseServices CourseServ = new CourseServices();
             UserServices UserServ = new UserServices();
             HttpCookie loggedTeacher = Request.Cookies["LoggedUser"];
-            TeacherModel teacher = UserServ.GetTeacher(loggedTeacher.Values.Get("Name"), loggedTeacher.Values.Get("Surname"), loggedTeacher.Values.Get("Login"));
+            TeacherModel teacher = UserServ.GetTeacher(loggedTeacher.Values.Get("Login"));
             courses = CourseServ.GetCourses(teacher.IdNauczyciela);
             return View(courses);
         }
+
     }
 }

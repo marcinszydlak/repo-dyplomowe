@@ -1,0 +1,26 @@
+﻿@model IEnumerable<DataServices.ViewModels.SolutionModel>
+
+@{
+    ViewBag.Title = "TaskSolutions";
+    Layout = "~/Views/Shared/Teacher.cshtml";
+}
+
+<h2>ManageTasks</h2>
+
+<p>
+    @Html.ActionLink("Dodaj nowe zadanie", "CreateNewTask")
+<p>
+    @Html.ActionLink("Dodaj nowy kurs", "CreateCourse", "Teacher")
+    @Html.Grid(Model).Named("CourseList").Columns(columns =>
+{
+    columns.Add(x => x.SolutionId).Titled("IdRozwiązania");
+    columns.Add(x => x.Student).Titled("Uczeń");
+    columns.Add(x => x.Note).Titled("Ocena");
+    columns.Add(x => x.Comment).Titled("Opis zadania");
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "TaskDelete", "Course", new { TaskId = o.TaskId }, null));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Szczegóły", "StudentSolution", "Course", new { SolutionId = o.SolutionId }, null));
+    //columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Przegladaj rozwiązania", "TaskSolutions", new { TaskId = o.TaskId }, null));
+}).WithPaging(10).Sortable().Selectable(true)
+</p>
+</p>
+

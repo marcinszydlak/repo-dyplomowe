@@ -167,9 +167,10 @@ namespace DataServices
             return model;
         }
         //Pobieranie rekordu o studencie po informacjach
-        public StudentModel GetStudent(string Name, string Surname,string Login)
+        public StudentModel GetStudent(string Login)
         {
-            var item = db.Uczniowie.Where(x => x.Imię == Name && x.Nazwisko == Surname && x.Login == Login).FirstOrDefault();
+            
+            var item = db.Uczniowie.Where(x => x.Login == Login).FirstOrDefault();
             StudentModel model = new StudentModel();
             model.IdKlasy = item.IdKlasy;
             model.IdUcznia = item.IdUcznia;
@@ -258,9 +259,9 @@ namespace DataServices
             Teacher.Hasło = query.Hasło;
             return Teacher;
         }
-        public TeacherModel GetTeacher(string Name, string Surname, string Login)
+        public TeacherModel GetTeacher(string Login)
         {
-            var item = db.Nauczyciele.Where(x => x.Imię == Name && x.Nazwisko == Surname && x.Login == Login).FirstOrDefault();
+            var item = db.Nauczyciele.Where(x =>x.Login == Login).FirstOrDefault();
             TeacherModel model = new TeacherModel();
             model.IdNauczyciela = item.IdProwadzącego;
             model.Imię= item.Imię;

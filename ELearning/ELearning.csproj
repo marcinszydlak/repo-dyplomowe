@@ -260,6 +260,14 @@
     <Content Include="Views\Course\Index.cshtml" />
     <Content Include="Views\Teacher\CreateCourse.cshtml" />
     <Content Include="Views\Teacher\ManageCourses.cshtml" />
+    <Content Include="Views\Course\CourseEdit.cshtml" />
+    <Content Include="Views\Course\CourseDelete.cshtml" />
+    <Content Include="Views\Course\ManageTasks.cshtml" />
+    <Content Include="Views\Course\TaskSolutions.cshtml" />
+    <Content Include="Views\Course\StudentSolution.cshtml" />
+    <Content Include="Views\Student\ManageCourses.cshtml" />
+    <Content Include="Views\Student\TaskList.cshtml" />
+    <Content Include="Views\Student\InsertSolution.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -20,6 +20,9 @@ namespace Database
         public byte[] TreśćRozwiązania { get; set; }
         public Nullable<byte> Ocena { get; set; }
         public string Komentarz { get; set; }
+        public string NazwaPliku { get; set; }
+        public string Rozszerzenie { get; set; }
+        public Nullable<System.DateTime> DataWstawienia { get; set; }
     
         public virtual Uczniowie Uczniowie { get; set; }
         public virtual Zadania Zadania { get; set; }

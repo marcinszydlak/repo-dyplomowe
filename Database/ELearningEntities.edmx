@@ -51,6 +51,9 @@
           <Property Name="TreśćRozwiązania" Type="varbinary(max)" />
           <Property Name="Ocena" Type="tinyint" />
           <Property Name="Komentarz" Type="varchar" MaxLength="50" />
+          <Property Name="NazwaPliku" Type="varchar" MaxLength="50" />
+          <Property Name="Rozszerzenie" Type="varchar(max)" />
+          <Property Name="DataWstawienia" Type="datetime" />
         </EntityType>
         <EntityType Name="Uczniowie">
           <Key>
@@ -272,6 +275,9 @@
           <Property Name="Komentarz" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Uczniowie" Relationship="Self.FK_Rozwiązania_Uczniowie" FromRole="Rozwiązania" ToRole="Uczniowie" />
           <NavigationProperty Name="Zadania" Relationship="Self.FK_Rozwiązania_Zadania" FromRole="Rozwiązania" ToRole="Zadania" />
+          <Property Name="NazwaPliku" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rozszerzenie" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DataWstawienia" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Uczniowie">
           <Key>
@@ -484,6 +490,9 @@
           <EntitySetMapping Name="Rozwiązania">
             <EntityTypeMapping TypeName="KursyELearningDBModel.Rozwiązania">
               <MappingFragment StoreEntitySet="Rozwiązania">
+                <ScalarProperty Name="DataWstawienia" ColumnName="DataWstawienia" />
+                <ScalarProperty Name="Rozszerzenie" ColumnName="Rozszerzenie" />
+                <ScalarProperty Name="NazwaPliku" ColumnName="NazwaPliku" />
                 <ScalarProperty Name="IdRozwiązania" ColumnName="IdRozwiązania" />
                 <ScalarProperty Name="IdUcznia" ColumnName="IdUcznia" />
                 <ScalarProperty Name="IdZadania" ColumnName="IdZadania" />

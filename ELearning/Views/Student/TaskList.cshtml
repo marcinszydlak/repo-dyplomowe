@@ -1,0 +1,22 @@
+﻿@model IEnumerable<DataServices.ViewModels.TaskModel>
+
+@{
+    ViewBag.Title = "Lista Tasków";
+    Layout = "~/Views/Shared/Student.cshtml";
+}
+
+<h2>ManageTasks</h2>
+
+    @Html.Grid(Model).Named("CourseList").Columns(columns =>
+{
+    columns.Add(x => x.TaskId).Titled("IdKursu");
+    columns.Add(x => x.CreationDate).Titled("Data utworzenia");
+    columns.Add(x => x.DeadLineDate).Titled("Termin oddania zadania");
+    columns.Add(x => x.Descriprion).Titled("Opis zadania");
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Wstaw rozwiazanie", "InsertSolution", "Student", new { TaskId = o.TaskId }, null));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Zmień", "TaskEdit", "Course", new { TaskId = o.TaskId }, null));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Przegladaj rozwiązania", "TaskSolutions", new { TaskId = o.TaskId }, null));
+}).WithPaging(10).Sortable().Selectable(true)
+</p>
+</p>
+

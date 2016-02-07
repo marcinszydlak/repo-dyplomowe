@@ -13,7 +13,10 @@ namespace DataServices.ViewModels
         public int StudentId { get; set; }
         public int TaskId { get; set; }
         public byte[] Solution { get; set; }
-        public int Note { get; set; }
+        public byte? Note { get; set; }
         public string Comment { get; set; }
+        public string FileName { get; set; }
+        public string Extension { get; set; }
+        public StudentModel Student { get; set; }
     }
 }
