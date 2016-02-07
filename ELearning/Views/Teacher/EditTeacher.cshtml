@@ -1,0 +1,50 @@
+﻿@model DataServices.ViewModels.TeacherModel
+
+@{
+    ViewBag.Title = "EditTeacher";
+    Layout = "~/Views/Shared/Teacher.cshtml";
+}
+
+<h2>Zmień Hasło</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Dane</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Label("Podane hasła różnią się", htmlAttributes: new { @id = "diff" })
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Hasło, htmlAttributes: new { @class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Hasło, new { htmlAttributes = new { @class = "form-control", @id = "Password" } })
+                @Html.ValidationMessageFor(model => model.Hasło, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Powtórz hasło", htmlAttributes: new { @class = "control-label col-md-2", })
+            <div class="col-md-10">
+                @Html.Password("Powtorz", String.Empty, htmlAttributes: new { @class = "form-control" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" id="save"/>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Powrót do strony głównej", "Index", "Teacher")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/validation")
+}

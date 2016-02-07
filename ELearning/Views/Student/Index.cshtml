@@ -1,0 +1,23 @@
+﻿@model DataServices.ViewModels.LoggedUserModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Student.cshtml";
+}
+@if (Session["zalogowany"] != null)
+{
+    <h2>Jesteś zalogowany jako : @Model.Name @Model.Surname</h2>
+}
+else
+{
+    if (Session["admin"] != null)
+    {
+    }
+    else
+    {
+        <h2>Nie masz dostępu do tej strony</h2>
+        Html.ActionLink("Wróc do strony logowania", "Index", "Login");
+    }
+}
+
+
