@@ -1,0 +1,23 @@
+﻿@model IEnumerable<DataServices.ViewModels.ClassModel>
+@using GridMvc.Html
+
+@{
+    ViewBag.Title = "ManageClasses";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<h2>Zarządzaj uczniami w bazie danych</h2>
+
+<p>
+    @Html.ActionLink("Dodaj nową klasę", "AddNewClass")
+    @Html.Grid(Model).Named("ClassList").Columns(columns =>
+{
+    columns.Add(x => x.IdKlasy);
+    columns.Add(x => x.Oddział);
+    columns.Add(x => x.IdWychowawcy);
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "DeleteClass", new { IdKlasy = o.IdKlasy }));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Zmień", "EditClass", new { IdKlasy = o.IdKlasy }));
+
+
+}).WithPaging(10).Sortable().Selectable(true)
+</p>

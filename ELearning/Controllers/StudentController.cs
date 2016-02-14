@@ -53,9 +53,9 @@ namespace ELearning.Controllers
             services.ChangePassword(student.Login, student.Name, student.Surname, model.Password);
 
             UserLoginModel logged = new UserLoginModel();
-            logged.Login = model.Login;
-            logged.Name = model.Name;
-            logged.Surname = model.Surname;
+            logged.Login = student.Login;
+            logged.Name = student.Name;
+            logged.Surname = student.Surname;
             return RedirectToAction("Index",logged);
         }
         [HttpGet]
@@ -101,6 +101,63 @@ namespace ELearning.Controllers
             cs.NewSolution(model);
 
             return RedirectToAction("ManageCourses","Student");
+        }
+        [HttpGet]
+        public ActionResult SolutionEdit(int TaskId)
+        {
+            CourseServices cs = new CourseServices();
+            UserServices us = new UserServices();
+            HttpCookie cookie = Request.Cookies.Get("LoggedUser");
+            cookie.Values.Get("Name");
+            cookie.Values.Get("Surname");
+            cookie.Values.Get("Login");
+            StudentModel student = new StudentModel();
+            student = us.GetStudent(cookie.Values.Get("Login"));
+            SolutionModel solution = new SolutionModel();
+            solution = cs.GetSolution(TaskId,student);
+            return View(solution);
+        }
+        [HttpPost]
+        public ActionResult SolutionEdit(SolutionModel model, HttpPostedFileBase upload)
+        {
+            CourseServices cs = new CourseServices();
+            UserServices us = new UserServices();
+            HttpCookie loggedStudent = Request.Cookies["LoggedUser"];
+            model.Student = us.GetStudent(loggedStudent.Values.Get("Login"));
+            model.StudentId = model.Student.IdUcznia;
+            model.FileName = upload.FileName;
+            using (var reader = new System.IO.BinaryReader(upload.InputStream))
+            {
+                model.Solution = reader.ReadBytes(upload.ContentLength);
+            }
+            cs.SolutionEdit(model);
+            return RedirectToAction("TaskList", new { CourseId = cs.GetTask(model.TaskId).CourseId });
+        }
+
+        [HttpGet]
+        public ActionResult StudentSolution(int TaskId)
+        {
+            CourseServices cs = new CourseServices();
+            UserServices us = new UserServices();
+            HttpCookie cookie = Request.Cookies.Get("LoggedUser");
+            cookie.Values.Get("Name");
+            cookie.Values.Get("Surname");
+            cookie.Values.Get("Login");
+            StudentModel student = new StudentModel();
+            student = us.GetStudent(cookie.Values.Get("Login"));
+            SolutionModel solution = new SolutionModel();
+            solution = cs.GetSolution(TaskId, student);
+            return View(solution);
+        }
+        [HttpGet]
+        public FileContentResult Download(int SolutionId)
+        {
+            CourseServices cs = new CourseServices();
+            SolutionModel model = new SolutionModel();
+            model = cs.GetSolution(SolutionId);
+            FileServices fs = new FileServices();
+            string ContentType = fs.GetContentType(model.Extension);
+            return File(model.Solution, ContentType, model.FileName);
         }
     }
 }

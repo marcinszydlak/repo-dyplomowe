@@ -13,7 +13,7 @@ namespace DataServices.ViewModels
         public string Nazwisko { get; set; }
         public string Login { get; set; }
         public string Hasło { get; set; }
-
+        public string Wizytowka { get; set; }
         public override string ToString()
         {
             return this.Imię + " " + this.Nazwisko;

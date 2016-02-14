@@ -105,16 +105,53 @@ namespace DataServices
                 {
                     IdKlasy = item.IdKlasy,
                     IdWychowawcy = item.IdWychowawcy,
-                    Oddział = item.Oddział
+                    Oddział = item.Oddział,
+                    //Nauczyciele = this.GetTeachers()
                 });
             }
             return klasy;
         }
+        public ClassModel GetClass(int IdKlasy)
+        {
+            ClassModel model = new ClassModel();
+            var query = db.Klasy.Where(x => x.IdKlasy == IdKlasy).FirstOrDefault();
+            model.IdKlasy = query.IdKlasy;
+            model.Oddział = query.Oddział;
+            model.IdWychowawcy = query.IdWychowawcy;
+            model.Nauczyciele = this.GetTeachers();
+            return model;
+        }
+        public void CreateClass(ClassModel model)
+        {
+            db.Klasy.Add(new Klasy
+                {
+                    IdKlasy = db.Klasy.Max(x=>x.IdKlasy) +1,
+                    IdWychowawcy = model.IdWychowawcy,
+                    Oddział = model.Oddział
+                });
+            db.SaveChanges();
+        }
+        public void UpdateClass(ClassModel model)
+        {
+            var query = db.Klasy.Where(x => x.IdKlasy == model.IdKlasy).FirstOrDefault();
+            query.IdKlasy = model.IdKlasy;
+            query.IdWychowawcy = model.IdWychowawcy;
+            query.Oddział = model.Oddział;
+            db.SaveChanges();
+        }
+        public void DeleteClass(ClassModel model)
+        {
+            var students = db.Uczniowie.Where(x => x.IdKlasy == model.IdKlasy).ToList();
+            foreach (var student in students)
+            {
+                student.IdKlasy = 0;
+            }
+            var query = db.Klasy.Where(x => x.IdKlasy == model.IdKlasy).FirstOrDefault();
+            db.Klasy.Remove(query);
+            db.SaveChanges();
+        }
         #endregion
         #region Uczniowie
-        /* Do zrobienia 
-                - szyfrowanie hasła
-         */
         //Pobieranie listy uczniów 
         public List<StudentModel> GetStudents()
         {
@@ -184,6 +221,8 @@ namespace DataServices
         //Kasowanie rekordu studenta na podstawie modelu
         public void DeleteStudent(StudentModel model)
         {
+            var studentRef = db.Rozwiązania.Where(x => x.IdUcznia == model.IdUcznia).ToList();
+            db.Rozwiązania.RemoveRange(studentRef);
             var item = db.Uczniowie.Where(x => x.IdUcznia == model.IdUcznia).FirstOrDefault();
             db.Uczniowie.Remove(item);
             db.SaveChanges();
@@ -243,7 +282,8 @@ namespace DataServices
                     Login = item.Login,
                     Hasło = item.Hasło,
                     Imię = item.Imię,
-                    Nazwisko = item.Nazwisko
+                    Nazwisko = item.Nazwisko,
+                    Wizytowka = item.Imię + " " +item.Nazwisko
                 });
             }
             return Teachers;
@@ -286,9 +326,33 @@ namespace DataServices
         }
 
         //Aktualizacja występującego rekordu o nauczycielu
-        public void UpdateTeacher(int IdNauczyciela)
+        public void UpdateTeacher(TeacherModel model)
         {
-            Nauczyciele nauczyciel = db.Nauczyciele.ElementAt(IdNauczyciela);
+            var nauczyciel = db.Nauczyciele.Where(n => n.IdProwadzącego == model.IdNauczyciela).FirstOrDefault();
+            nauczyciel.Login = model.Login;
+            nauczyciel.Imię = model.Imię;
+            nauczyciel.Nazwisko = model.Nazwisko;
+            db.SaveChanges();
+        }
+        public void DeleteTeacher(TeacherModel model)
+        {
+            var classRef = db.Klasy.Where(x => x.IdWychowawcy == model.IdNauczyciela).ToList();
+            db.Klasy.RemoveRange(classRef);
+            var courseRef = db.Kursy.Where(x => x.IdProwadzącego == model.IdNauczyciela).ToList();
+            foreach (var course in courseRef)
+            {
+                var taskRef = db.Zadania.Where(x => x.IdKursu == course.IdKursu).ToList();
+                foreach(var task in taskRef)
+                {
+                    var solutionRef = db.Rozwiązania.Where(x => x.IdZadania == task.IdZadania).ToList();
+                    db.Rozwiązania.RemoveRange(solutionRef);
+                }
+                db.Zadania.RemoveRange(taskRef);
+            }
+            db.Kursy.RemoveRange(courseRef);
+            var item = db.Nauczyciele.Where(x => x.IdProwadzącego == model.IdNauczyciela).FirstOrDefault();
+            db.Nauczyciele.Remove(item);
+            db.SaveChanges();
         }
         public bool ExistsTeacherInDatabase(string login, string name, string surname)
         {

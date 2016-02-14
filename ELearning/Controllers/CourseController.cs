@@ -46,6 +46,7 @@ namespace ELearning.Controllers
         public ActionResult CourseDelete(CourseModel model)
         {
             CourseServices services = new CourseServices();
+            model.Tasks = services.GetTasks(model.CourseId);
             services.CourseDelete(model);
             return RedirectToAction("Index", "Teacher");
         }
@@ -60,6 +61,21 @@ namespace ELearning.Controllers
             model.Tasks = service.GetTasks(CourseId);
             return View(model.Tasks);
         }
+        [HttpGet]
+        public ActionResult CreateNewTask(int CourseId)
+        {
+            CourseServices service = new CourseServices();
+            TaskModel model = new TaskModel();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult CreateNewTask(TaskModel model)
+        {
+            CourseServices service = new CourseServices();
+            service.NewTask(model);
+            return RedirectToAction("ManageTasks");
+        }
+
         [HttpGet]
         public ActionResult TaskEdit(int TaskId)
         {
@@ -87,18 +103,7 @@ namespace ELearning.Controllers
             return View(solutions);
         }
         #endregion
-        [HttpGet]
-        public ActionResult SolutionAdd(TaskModel task)
-        {
-            return View(task);
-        }
 
-        [HttpPost]
-        public ActionResult SolutionAdd(SolutionModel solution)
-        {
-            HttpPostedFileBase file;
-            return View();
-        }
 
         [HttpGet]
         public ActionResult NoteEdit(int SolutionId)
@@ -113,7 +118,7 @@ namespace ELearning.Controllers
         {
             CourseServices service = new CourseServices();
             service.EditNote(model);
-            return RedirectToAction("Index", "Course");
+            return RedirectToAction("TaskSolution",model.TaskId);
         }
 
         [HttpGet]
@@ -124,6 +129,7 @@ namespace ELearning.Controllers
             model = service.GetSolution(SolutionId);
             return View(model);
         }
+
         [HttpGet]
         public FileContentResult Download(int SolutionId)
         {

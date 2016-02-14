@@ -4,14 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9d8f05ce41e64edba0a729b78b335d69" Name="Diagram1">
-        <EntityTypeShape EntityType="KursyELearningDBModel.Klasy" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="KursyELearningDBModel.Kursy" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="KursyELearningDBModel.Nauczyciele" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="KursyELearningDBModel.Przedmioty" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="KursyELearningDBModel.Rozwiązania" Width="1.5" PointX="9.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="KursyELearningDBModel.Uczniowie" Width="1.5" PointX="5.25" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="KursyELearningDBModel.Zadania" Width="1.5" PointX="7.5" PointY="3.375" IsExpanded="true" />
+      <Diagram DiagramId="9d8f05ce41e64edba0a729b78b335d69" Name="Diagram1" ZoomLevel="100">
+        <EntityTypeShape EntityType="KursyELearningDBModel.Klasy" Width="1.5" PointX="2.5" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="KursyELearningDBModel.Kursy" Width="1.5" PointX="4.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="KursyELearningDBModel.Nauczyciele" Width="1.5" PointX="4.375" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="KursyELearningDBModel.Przedmioty" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="KursyELearningDBModel.Rozwiązania" Width="1.5" PointX="2.375" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="KursyELearningDBModel.Uczniowie" Width="1.5" PointX="0.5" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="KursyELearningDBModel.Zadania" Width="1.5" PointX="6.25" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="KursyELearningDBModel.FK_Klasy_Nauczyciele" ManuallyRouted="false" />
         <AssociationConnector Association="KursyELearningDBModel.FK_Kursy_Klasy" ManuallyRouted="false" />
         <AssociationConnector Association="KursyELearningDBModel.FK_Uczniowie_Klasy" ManuallyRouted="false" />

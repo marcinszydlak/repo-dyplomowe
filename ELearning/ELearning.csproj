@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>&lt;Objects&gt;&lt;ObjectGroup Name="KursyELearningDBEntities" Order="1"&gt;&lt;Destination Path="&amp;quot%3bData Source=SQL5021.Smarterasp.net%3bInitial Catalog=DB_9F3A29_DB%3bUser Id=DB_9F3A29_DB_admin%3bPassword=dceeec34%3b&amp;quot%3b" /&gt;&lt;/ObjectGroup&gt;&lt;/Objects&gt;</PublishDatabaseSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -298,6 +299,17 @@
     <Content Include="Views\Student\ManageCourses.cshtml" />
     <Content Include="Views\Student\TaskList.cshtml" />
     <Content Include="Views\Student\InsertSolution.cshtml" />
+    <Content Include="Views\DatabaseAction\DeleteTeacher.cshtml" />
+    <Content Include="Views\DatabaseAction\ManageClasses.cshtml" />
+    <Content Include="Views\DatabaseAction\AddNewClass.cshtml" />
+    <Content Include="Views\DatabaseAction\EditClass.cshtml" />
+    <Content Include="Views\DatabaseAction\DeleteClass.cshtml" />
+    <Content Include="Views\Teacher\CreateNewTask.cshtml" />
+    <Content Include="Views\Course\CreateNewTask.cshtml" />
+    <Content Include="Views\Course\NoteEdit.cshtml" />
+    <Content Include="Views\Teacher\TaskList.cshtml" />
+    <Content Include="Views\Student\SolutionEdit.cshtml" />
+    <Content Include="Views\Student\StudentSolution.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

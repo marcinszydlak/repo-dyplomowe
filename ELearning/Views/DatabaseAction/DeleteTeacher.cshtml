@@ -1,0 +1,70 @@
+﻿@model DataServices.ViewModels.TeacherModel
+
+@{
+    ViewBag.Title = "DeleteTeacher";
+    Layout = "~/Views/Shared/Admin.cshtml"; 
+}
+@if(Session["admin"]!= null)
+{
+<h2>Usuń nauczyciela : @Model.ToString()</h2>
+
+<h3>Czy jesteś pewien że chcesz usunąć ten wpis z bazy?</h3>
+<div>
+    <h4>Dane : </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IdNauczyciela)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdNauczyciela)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Imię)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Imię)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nazwisko)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nazwisko)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hasło)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hasło)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" />
+            @Html.ActionLink("Back to List", "ManageTeachers",null,new { @class = "btn btn-default"})
+        </div>
+    }
+</div>
+}
+else
+{
+    <h2>Nie masz uprawnien do przegladania zawartosci</h2>
+}

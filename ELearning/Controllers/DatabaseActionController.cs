@@ -10,7 +10,7 @@ namespace ELearning.Controllers
 {
     public class DatabaseActionController : Controller
     {
-        #region Login As Administrator
+        #region Login As Administrator And Basic Actions
         // GET: DatabaseAction
         [HttpGet]
         public ActionResult Index()
@@ -34,6 +34,13 @@ namespace ELearning.Controllers
 
             }
             return View(admin);
+        }
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Request.Cookies.Remove("Admin");
+            Session.Remove("admin");
+            return RedirectToAction("Main", "MainPage");
         }
         #endregion
         #region Students Actions
@@ -125,13 +132,85 @@ namespace ELearning.Controllers
             model = service.GetTeacher(IdNauczyciela);
             return View(model);
         }
-        #endregion
-        [HttpGet]
-        public ActionResult Logout()
+
+        [HttpPost]
+        public ActionResult EditTeacher(TeacherModel model)
         {
-                Request.Cookies.Remove("Admin");
-                Session.Remove("admin");
-                return RedirectToAction("Main", "MainPage");
+            UserServices service = new UserServices();
+            service.UpdateTeacher(model);
+            return RedirectToAction("ManageTeachers", "DatabaseAction");
         }
+
+        [HttpGet]
+        public ActionResult DeleteTeacher(int IdNauczyciela)
+        {
+            UserServices service = new UserServices();
+            TeacherModel model = new TeacherModel();
+            model = service.GetTeacher(IdNauczyciela);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteTeacher(TeacherModel model)
+        {
+            UserServices ServicesForUser = new UserServices();
+            ServicesForUser.DeleteTeacher(model);
+            return RedirectToAction("ManageTeachers");
+        }
+        #endregion
+        #region Classes Actions
+        public ActionResult ManageClasses()
+        {
+            UserServices services = new UserServices();
+            List<ClassModel> classes = new List<ClassModel>();
+            classes = services.GetClasses();
+            return View(classes);
+        }
+        [HttpGet]
+        public ActionResult AddNewClass()
+        {
+            UserServices services = new UserServices();
+            ClassModel model = new ClassModel();
+            model.Nauczyciele = services.GetTeachers();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult AddNewClass(ClassModel model)
+        {
+            UserServices services = new UserServices();
+            services.CreateClass(model);
+            return RedirectToAction("ManageClasses");
+        }
+        [HttpGet]
+        public ActionResult EditClass(int IdKlasy)
+        {
+            UserServices services = new UserServices();
+            ClassModel klasa = new ClassModel();
+            klasa = services.GetClass(IdKlasy);
+            return View(klasa);
+        }
+        [HttpPost]
+        public ActionResult EditClass(ClassModel model)
+        {
+            UserServices services = new UserServices();
+            services.UpdateClass(model);
+            return RedirectToAction("ManageClasses");
+        }
+        [HttpGet]
+        public ActionResult DeleteClass(int IdKlasy)
+        {
+            UserServices services = new UserServices();
+            ClassModel model = new ClassModel();
+            model = services.GetClass(IdKlasy);
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult DeleteClass(ClassModel model)
+        {
+            UserServices services = new UserServices();
+            services.DeleteClass(model);
+            return RedirectToAction("ManageClasses");
+        }
+        #endregion
     }
 }

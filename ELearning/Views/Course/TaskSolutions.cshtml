@@ -19,7 +19,7 @@
     columns.Add(x => x.Comment).Titled("Opis zadania");
     columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "TaskDelete", "Course", new { TaskId = o.TaskId }, null));
     columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Szczegóły", "StudentSolution", "Course", new { SolutionId = o.SolutionId }, null));
-    //columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Przegladaj rozwiązania", "TaskSolutions", new { TaskId = o.TaskId }, null));
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Ocen", "NoteEdit","Course", new { SolutionId = o.SolutionId }, null));
 }).WithPaging(10).Sortable().Selectable(true)
 </p>
 </p>

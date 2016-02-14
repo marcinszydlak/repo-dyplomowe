@@ -52,14 +52,19 @@ namespace ELearning.Controllers
                 cookie.Values.Add("Name",model.Name);
                 cookie.Values.Add("Surname",model.Surname);
                 cookie.Values.Add("Login",model.Login);
-                cookie.Expires = DateTime.Now.AddDays(1.0);
-                Response.Cookies.Add(cookie);
+
                 if (service.ExistsStudentInDatabase(user.Login, user.Name, user.Surname))
                 {
+                    cookie.Values.Add("Role", "S");
+                    cookie.Expires = DateTime.Now.AddDays(1.0);
+                    Response.Cookies.Add(cookie);
                     return RedirectToAction("Index", "Student", user);
                 }
                 else
                 {
+                    cookie.Values.Add("Role", "T");
+                    cookie.Expires = DateTime.Now.AddDays(1.0);
+                    Response.Cookies.Add(cookie);
                     return RedirectToAction("Index", "Teacher", user);
                 }
             }

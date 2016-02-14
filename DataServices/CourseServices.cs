@@ -111,6 +111,14 @@ namespace DataServices
 
         public void CourseDelete(CourseModel model)
         {
+
+            foreach(var item in model.Tasks)
+            {
+                var SolutionsToDelete = db.Rozwiązania.Where(x => x.IdZadania == item.TaskId);
+                db.Rozwiązania.RemoveRange(SolutionsToDelete);
+            }
+            var TasksToDelete = db.Zadania.Where(x => x.IdKursu == model.CourseId).ToList();
+            db.Zadania.RemoveRange(TasksToDelete);
             var CourseToDelete = db.Kursy.Where(x => x.IdKursu == model.CourseId).FirstOrDefault();
             db.Kursy.Remove(CourseToDelete);
             db.SaveChanges();
@@ -195,9 +203,25 @@ namespace DataServices
                 Extension = query.Rozszerzenie,
                 Comment = query.Komentarz,
                 Note = query.Ocena,
-                Student = us.GetStudent(query.IdUcznia)
+                Student = us.GetStudent(query.IdUcznia),
+                Notes = GetPossibleNotes()
             };
             return model;
+        }
+        public SolutionModel GetSolution(int TaskId,StudentModel model)
+        {
+            SolutionModel solution = new SolutionModel();
+            var query = db.Rozwiązania.Where(x => x.IdZadania == TaskId && x.IdUcznia == model.IdUcznia).FirstOrDefault();
+            solution.Student = model;
+            solution.StudentId = model.IdUcznia;
+            solution.Note = query.Ocena;
+            solution.Notes = GetPossibleNotes();
+            solution.SolutionId = query.IdRozwiązania;
+            solution.Solution = query.TreśćRozwiązania;
+            solution.FileName = query.NazwaPliku;
+            solution.Extension = query.Rozszerzenie;
+            solution.Comment = query.Komentarz;
+            return solution;
         }
         public List<SolutionModel> GetSolutions(int TaskId)
         {
@@ -228,6 +252,27 @@ namespace DataServices
             query.Komentarz = model.Comment;
             query.Ocena = model.Note;
             db.SaveChanges();
+        }
+        public void SolutionEdit(SolutionModel model)
+        {
+            var solutionToEdit = db.Rozwiązania.Where(x => x.IdRozwiązania == model.SolutionId).FirstOrDefault();
+            if(!(solutionToEdit.Ocena.HasValue && solutionToEdit.Komentarz != String.Empty))
+            {
+                solutionToEdit.TreśćRozwiązania = model.Solution;
+                solutionToEdit.DataWstawienia = DateTime.Now;
+                db.SaveChanges();
+            }
+        }
+        public List<NoteModel> GetPossibleNotes()
+        {
+            List<NoteModel> notes = new List<NoteModel>();
+            notes.Add(new NoteModel { Value = 1, StringValue = "Niedostateczny" });
+            notes.Add(new NoteModel { Value = 2, StringValue = "Dopuszczający" });
+            notes.Add(new NoteModel { Value = 3, StringValue = "Dostateczny" });
+            notes.Add(new NoteModel { Value = 4, StringValue = "Dobry" });
+            notes.Add(new NoteModel { Value = 5, StringValue = "Bardzo dobry" });
+            notes.Add(new NoteModel { Value = 6, StringValue = "Celujący" });
+            return notes;
         }
         #endregion
         #region Subjects

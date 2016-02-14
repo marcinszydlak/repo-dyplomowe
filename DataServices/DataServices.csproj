@@ -63,6 +63,7 @@
     <Compile Include="ViewModels\ClassModel.cs" />
     <Compile Include="ViewModels\CourseModel.cs" />
     <Compile Include="ViewModels\LoggedUserModel.cs" />
+    <Compile Include="ViewModels\NoteModel.cs" />
     <Compile Include="ViewModels\SolutionModel.cs" />
     <Compile Include="ViewModels\StudentModel.cs" />
     <Compile Include="ViewModels\SubjectModel.cs" />

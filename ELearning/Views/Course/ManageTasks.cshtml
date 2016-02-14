@@ -6,11 +6,11 @@
 }
 
 <h2>ManageTasks</h2>
-
 <p>
-    @Html.ActionLink("Dodaj nowe zadanie", "CreateNewTask")
+    @Html.ActionLink("Dodaj nowe zadanie", "CreateNewTask", new { CourseId = Request.Params["CourseId"]})
 <p>
     @Html.ActionLink("Dodaj nowy kurs", "CreateCourse","Teacher")
+
     @Html.Grid(Model).Named("CourseList").Columns(columns =>
 {
     columns.Add(x => x.TaskId).Titled("IdKursu");
