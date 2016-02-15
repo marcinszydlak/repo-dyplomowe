@@ -80,6 +80,7 @@ namespace DataServices
             model.CourseTitle = course.Tytuł;
             model.SubjectId = course.IdPrzedmiotu;
             model.Subject = db.Przedmioty.Where(x => x.IdPrzedmiotu == course.IdPrzedmiotu).Select(p => p.NazwaPrzedmiotu).FirstOrDefault();
+            model.TeacherId = course.IdProwadzącego;
             var tasks = db.Zadania.Where(x => x.IdKursu == CourseId).ToList();
             model.Tasks = new List<TaskModel>();
             foreach(var task in tasks)
@@ -102,10 +103,31 @@ namespace DataServices
         public void CourseEdit(CourseModel model)
         {
             var editedCourse = db.Kursy.Where(x => x.IdKursu == model.CourseId).FirstOrDefault();
-            editedCourse.IdKlasy = model.ClassId;
-            editedCourse.IdPrzedmiotu = model.SubjectId;
-            editedCourse.Opis = model.CourseDescription;
-            editedCourse.Tytuł = model.CourseTitle;
+            if (editedCourse.Zadania == null)
+            {
+                editedCourse.IdKlasy = model.ClassId;
+                editedCourse.IdPrzedmiotu = model.SubjectId;
+                editedCourse.Opis = model.CourseDescription;
+                editedCourse.Tytuł = model.CourseTitle;
+            }
+            else
+            {
+                var tasks = editedCourse.Zadania;
+                foreach(var task in tasks)
+                {
+                    if(task.Rozwiązania == null)
+                    {
+                        editedCourse.IdKlasy = model.ClassId;
+                        editedCourse.IdPrzedmiotu = model.SubjectId;
+                        editedCourse.Opis = model.CourseDescription;
+                        editedCourse.Tytuł = model.CourseTitle;
+                    }
+                    else
+                    {
+                        db.Rozwiązania.RemoveRange(task.Rozwiązania);
+                    }
+                }
+            }
             db.SaveChanges();
         }
 
@@ -172,20 +194,44 @@ namespace DataServices
             }
             return zadania;
         }
+        public void TaskDelete(TaskModel model)
+        {
+            var query = db.Zadania.Where(x => x.IdZadania == model.TaskId).FirstOrDefault();
+            var solutions = db.Rozwiązania.Where(x => x.IdZadania == model.TaskId).ToList();
+            db.Rozwiązania.RemoveRange(solutions);
+            db.Zadania.Remove(query);
+            db.SaveChanges();
+        }
         #endregion
         #region Solutions
         public void NewSolution(SolutionModel model)
         {
-            db.Rozwiązania.Add(new Rozwiązania()
+            if (db.Rozwiązania.Count() > 0)
             {
-                IdRozwiązania = db.Rozwiązania.Max(x => x.IdRozwiązania)+1,
-                IdUcznia = model.StudentId,
-                IdZadania = model.TaskId,
-                TreśćRozwiązania = model.Solution,
-                DataWstawienia = DateTime.Now,
-                NazwaPliku = model.FileName,
-                Rozszerzenie = model.FileName.Split(new Char[] { '.'}).Last()
-            });
+                db.Rozwiązania.Add(new Rozwiązania()
+                {
+                    IdRozwiązania = db.Rozwiązania.Max(x => x.IdRozwiązania) + 1,
+                    IdUcznia = model.StudentId,
+                    IdZadania = model.TaskId,
+                    TreśćRozwiązania = model.Solution,
+                    DataWstawienia = DateTime.Now,
+                    NazwaPliku = model.FileName,
+                    Rozszerzenie = model.FileName.Split(new Char[] { '.' }).Last()
+                });
+            }
+            else
+            {
+                db.Rozwiązania.Add(new Rozwiązania()
+                {
+                    IdRozwiązania = 1,
+                    IdUcznia = model.StudentId,
+                    IdZadania = model.TaskId,
+                    TreśćRozwiązania = model.Solution,
+                    DataWstawienia = DateTime.Now,
+                    NazwaPliku = model.FileName,
+                    Rozszerzenie = model.FileName.Split(new Char[] { '.' }).Last()
+                });
+            }
             db.SaveChanges();
             
         }

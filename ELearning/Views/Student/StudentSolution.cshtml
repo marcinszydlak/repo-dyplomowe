@@ -9,6 +9,17 @@
 
 <div>
     <h4>Dane Rozwiązania zadania :  @Html.DisplayFor(model => model.SolutionId) </h4>
+    <h4>
+        Otrzymana ocena : @Html.Label(Model.Note.ToString())
+        
+        @if (Model.Note.Value == 1) { @Html.Label("Niedostateczny"); }
+        @if (Model.Note.Value == 2) { @Html.Label("Dopuszczający"); }
+        @if (Model.Note.Value == 3) { @Html.Label("Dostateczny"); }
+        @if (Model.Note.Value == 4) { @Html.Label("Dobry"); }
+        @if (Model.Note.Value == 5) { @Html.Label("Bardzo dobry"); }
+        @if (Model.Note.Value == 6) { @Html.Label("Celujący"); }
+        @if (Model.Note.Value == null) { @Html.Label("Praca nie została oceniona"); }
+    </h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>

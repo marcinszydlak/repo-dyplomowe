@@ -1,0 +1,65 @@
+﻿@model DataServices.ViewModels.TaskModel
+
+@{
+    ViewBag.Title = "TaskDelete";
+    Layout = "~/Views/Shared/Teacher.cshtml";
+}
+
+<h2>Usuwanie zadania</h2>
+
+<h3>Chcesz usuńać ten kurs</h3>
+<div>
+    <h4>Zadanie</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descriprion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descriprion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeadLineDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeadLineDate)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Usuń" class="btn btn-default" /> |
+            @Html.ActionLink("Powrót do listy", "ManageCourses","Student")
+        </div>
+    }
+</div>

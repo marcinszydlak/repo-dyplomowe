@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/Teacher.cshtml";
 }
 
-<h2>ManageTasks</h2>
+<h2>Lista rozwiązań</h2>
 
 <p>
     @Html.ActionLink("Dodaj nowe zadanie", "CreateNewTask")
@@ -17,7 +17,6 @@
     columns.Add(x => x.Student).Titled("Uczeń");
     columns.Add(x => x.Note).Titled("Ocena");
     columns.Add(x => x.Comment).Titled("Opis zadania");
-    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Usuń", "TaskDelete", "Course", new { TaskId = o.TaskId }, null));
     columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Szczegóły", "StudentSolution", "Course", new { SolutionId = o.SolutionId }, null));
     columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink("Ocen", "NoteEdit","Course", new { SolutionId = o.SolutionId }, null));
 }).WithPaging(10).Sortable().Selectable(true)

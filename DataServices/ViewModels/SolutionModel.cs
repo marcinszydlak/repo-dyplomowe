@@ -36,5 +36,6 @@ namespace DataServices.ViewModels
 
         public StudentModel Student { get; set; }
         public List<NoteModel> Notes { get; set; }
+ 
     }
 }

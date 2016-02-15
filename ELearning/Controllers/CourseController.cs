@@ -93,6 +93,22 @@ namespace ELearning.Controllers
         }
 
         [HttpGet]
+        public ActionResult TaskDelete(int TaskId)
+        {
+            CourseServices cs = new CourseServices();
+            TaskModel model = new TaskModel();
+            model = cs.GetTask(TaskId);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult TaskDelete(TaskModel task)
+        {
+            CourseServices cs = new CourseServices();
+            cs.TaskDelete(task);
+            return RedirectToAction("ManageTasks", task.CourseId);
+        }
+        [HttpGet]
         public ActionResult TaskSolutions(int TaskId)
         {
             TaskModel task = new TaskModel();
@@ -118,7 +134,7 @@ namespace ELearning.Controllers
         {
             CourseServices service = new CourseServices();
             service.EditNote(model);
-            return RedirectToAction("TaskSolution",model.TaskId);
+            return RedirectToAction("TaskSolutions", new { TaskId = model.TaskId });
         }
 
         [HttpGet]

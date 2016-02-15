@@ -23,7 +23,6 @@
                 <ul class="nav navbar-nav">
                     @if(Session["zalogowany"]!=null)
                     {
-                        <li>@Html.ActionLink("Kursy", "#", "#")</li>
                         <li>@Html.ActionLink("Zmień dane profilowe", "EditStudent", "Student")</li>
                         <li>@Html.ActionLink("Przeglądaj swoje kursy", "ManageCourses", "Student")</li>
                         <li>@Html.ActionLink("Wyloguj się", "Logout", "Login")</li>

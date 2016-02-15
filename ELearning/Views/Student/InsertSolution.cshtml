@@ -5,34 +5,18 @@
     Layout = "~/Views/Shared/Student.cshtml";
 }
 
-<h2>InsertSolution</h2>
+<h2>Wstaw rozwiązanie do zadania</h2>
 
 @using (Html.BeginForm("InsertSolution", "Student", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>SolutionModel</h4>
+        <h4>Rozwiązanie</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.StudentId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.StudentId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.StudentId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TaskId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
+        @Html.HiddenFor(model => model.TaskId)
         <div class="form-group">
             @Html.Label("Solution", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -42,7 +26,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Dodaj" class="btn btn-default" />
             </div>
         </div>
     </div>
