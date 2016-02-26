@@ -19,5 +19,10 @@ namespace ELearning.Controllers
         {
             return Redirect("mailto:marcinszydlak93@wp.pl");
         }
+        [HttpGet]
+        public ActionResult About()
+        {
+            return View();
+        }
     }
 }

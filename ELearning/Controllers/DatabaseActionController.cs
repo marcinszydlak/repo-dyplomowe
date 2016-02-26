@@ -64,9 +64,18 @@ namespace ELearning.Controllers
         public ActionResult AddNewStudent(StudentModel model)
         {
             UserServices ServiceForUser = new UserServices();
-            ServiceForUser.CreateNewStudent(model);
+            if (ServiceForUser.GetStudent(model.Login) == null)
+            {
+                ViewBag.Message = String.Empty;
+                ServiceForUser.CreateNewStudent(model);
+                return RedirectToAction("Index", "DatabaseAction");
+            }
+            else
+            {
+                ViewBag.Message = "Istnieje już uczeń o podanym loginie";
+                return RedirectToAction("AddNewStudent", "DatabaseAction");
+            }
             
-            return RedirectToAction("Index","DatabaseAction");
         }
         [HttpGet]
         public ActionResult DeleteStudent(int IdUcznia)
